@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { RolesEnum } from '../interfaces/roles.interface';
+import { Todo } from 'src/todo/entities/todo.entity';
 
 @Entity()
 export class User {
@@ -25,4 +26,7 @@ export class User {
     default: [RolesEnum.USER],
   })
   role: RolesEnum[]; // Change role to be an array of RolesEnum
+
+  @OneToMany(() => Todo, (todo) => todo.user)
+  todos: Todo[];
 }
