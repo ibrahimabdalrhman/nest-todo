@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsEmail,
   IsEnum,
   IsOptional,
@@ -6,7 +7,7 @@ import {
   Length,
 } from '@nestjs/class-validator';
 import { ApiProperty } from '@nestjs/swagger'; // Swagger decorator
-import { Roles } from '../../user/interfaces/roles.interface';
+import { RolesEnum } from '../../user/interfaces/roles.interface';
 
 export class SignupDto {
   @ApiProperty({ description: 'The name of the user', example: 'John Doe' })
@@ -32,11 +33,12 @@ export class SignupDto {
   @ApiProperty({
     description: 'Role of the user',
     example: 'user',
-    enum: Roles,
+    enum: RolesEnum,
   })
-  @IsEnum(Roles, { message: 'Role must be either "admin" or "user".' })
-  @IsOptional() // Optional because you might want the default role to be 'user'
-  role: string;
+  @IsOptional()
+  @IsArray()
+  @IsEnum(RolesEnum, { each: true }) // Ensure roles are enums
+  role?: RolesEnum[];
 
   @ApiProperty({
     description: 'User avatar URL',
